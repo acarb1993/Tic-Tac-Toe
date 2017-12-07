@@ -21,12 +21,24 @@ public class GamePanel extends JPanel {
 	                //Execute when button is pressed
 	                for(int i = 0; i < dashButtons.length; i++)
 	                	if (dashButtons[i] == e.getSource() && clicks % 2 == 0 ) {
-	                		dashButtons[i].setText("X");
-	                		clicks++;
+	                		if (dashButtons[i].getText().equals("X") ||
+	                			dashButtons[i].getText().equals("O")) {
+	                			// Do nothing
+	                		}
+	                		else {
+	                		    dashButtons[i].setText("X");
+	                		    clicks++;
+	                		}
 	                	}
 	                	else if (dashButtons[i] == e.getSource() && clicks % 2 != 0) {
-	                		dashButtons[i].setText("O");
-	                		clicks++;
+	                		if (dashButtons[i].getText().equals("X") ||
+		                			dashButtons[i].getText().equals("O")) {
+		                			// Do nothing
+		                		}
+	                		else {
+	                		    dashButtons[i].setText("O");
+	                		    clicks++;
+	                		}
 	                	}
 	            }
 	        }); // End addActionListener
