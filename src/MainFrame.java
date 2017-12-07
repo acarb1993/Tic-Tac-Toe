@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 public class MainFrame extends JFrame {
 	private static final int WIDTH = 800;
-	private static final int HEIGHT = 400; 
+	private static final int HEIGHT = 550; 
 	private GamePanel gamePanel;
 	private TextPanel textPanel;
 	
@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
 		textPanel = new TextPanel(WIDTH / 2, HEIGHT / 2);
 		add(textPanel);
 		
-		
+		setResizable(false);
 		setLocationRelativeTo(null); 
 		setVisible(true);
 	}
