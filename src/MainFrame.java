@@ -14,11 +14,12 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new GridLayout(1, 1) );
 		
+		gamePanel = new GamePanel(WIDTH / 2, HEIGHT / 2);
+		add(gamePanel);
+		
 		textPanel = new TextPanel(WIDTH / 2, HEIGHT / 2);
 		add(textPanel);
 		
-		gamePanel = new GamePanel(WIDTH / 2, HEIGHT / 2);
-		add(gamePanel);
 		
 		setLocationRelativeTo(null); 
 		setVisible(true);
