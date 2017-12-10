@@ -24,4 +24,8 @@ public class MainFrame extends JFrame {
 		setLocationRelativeTo(null); 
 		setVisible(true);
 	}
+	
+	public void playGame() { 
+		gamePanel.gameLogic();
+	}
 }
