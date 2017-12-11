@@ -1,12 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.Math;
 
 public class GamePanel extends JPanel {		
 	private DashButton[][] dashButtons;
 	private int xAxis, yAxis, clicks;
 	private TieFrame tieFrame;
+	private WinFrame winFrame;
 	private char play[][]; 
 	
 	// Constructor
@@ -52,15 +52,15 @@ public class GamePanel extends JPanel {
                 		        dashButtons[i][j].setText("X");
                 		        clicks++;
                 		        play[i][j] = 'X';
-                		        if(clicks == 9) tieFrame = new TieFrame();
-                		        checkWinCondition();
+                		        if (checkWinCondition() ) winFrame = new WinFrame("Player 1");
+                		        if(clicks == 9) { tieFrame = new TieFrame(); }
                 	        }
                 	        
                 	        else if (dashButtons[i][j] == e.getSource() && clicks % 2 != 0) {
                 		        dashButtons[i][j].setText("O");
                 		        clicks++;
                 		        play[i][j] = 'O';
-                		        checkWinCondition();
+                		        if (checkWinCondition() ) winFrame = new WinFrame("Player 2");
                 	        }
                         }
                     }
@@ -68,33 +68,35 @@ public class GamePanel extends JPanel {
             }); // End addActionListener
 	} // End gameLogic
 	
-	public void checkWinCondition() {
+	public boolean checkWinCondition() {
 		// Tests to see if there is a win across
 		for (int i = 0; i < play.length; i++) 
 			for (int j = 0; j < 1; j++) 
 				if (play[i][j] == play[i][j + 1] &&
 					play[i][j] == play[i][j + 2] ) 
-					System.exit(0);
+					return true;
 		
 		// Tests to see if there is a win downward
 		for (int i = 0; i < 1; i++) 
 			for (int j = 0; j < play[i].length; j++) 
 				if (play[i][j] == play[i + 1][j] &&
 					play[i][j] == play[i + 2][j] ) 
-					System.exit(0);
+					return true;
 		
 		// Tests to see if there is a left diagonal win
 		for(int i = 0; i < 1; i++) 
 			for (int j = 0; j < 1; j++)
 				if (play[i][j] == play[i + 1][j + 1] &&
 					play[i][j] == play[i + 2][j + 2])
-					System.exit(0);
+					return true;
 		
 		// Tests to see if there is a right diagonal win
-		for(int i = 2; i > 0; i--) 
+		for(int i = 2; i > 1; i--) 
 			for (int j = 0; j < 1; j++)
 				if (play[i][j] == play[i - 1][j + 1] &&
 					play[i][j] == play[i - 2][j + 2])
-					System.exit(0);
-	}
+					return true;
+		
+		return false;
+	}// End checkWinCondition
 }// End class 

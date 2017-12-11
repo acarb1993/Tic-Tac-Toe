@@ -11,7 +11,7 @@ public class MainFrame extends JFrame {
 	public MainFrame() {
 		setTitle("Tic-Tac-Toe");
 		setSize(WIDTH, HEIGHT);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new GridLayout(1, 1) );
 		
 		gamePanel = new GamePanel(WIDTH / 2, HEIGHT / 2);
@@ -25,7 +25,7 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 	}
 	
-	public void playGame() { 
-		gamePanel.gameLogic();
-	}
+	public void playGame() { gamePanel.gameLogic(); }
+	
+	public void close() { dispose(); }
 }
