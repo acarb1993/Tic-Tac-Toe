@@ -14,10 +14,9 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLayout(new GridLayout(1, 1) );
 		
-		gamePanel = new GamePanel(WIDTH / 2, HEIGHT / 2);
+		gamePanel = new GamePanel(WIDTH / 2, HEIGHT / 2, textPanel = new TextPanel(WIDTH / 2, HEIGHT / 2) );
+		textPanel.giveGamePanel(gamePanel);
 		add(gamePanel);
-		
-		textPanel = new TextPanel(WIDTH / 2, HEIGHT / 2);
 		add(textPanel);
 		
 		setResizable(false);
@@ -25,7 +24,7 @@ public class MainFrame extends JFrame {
 		setVisible(true);
 	}
 	
-	public void playGame() { gamePanel.gameLogic(); }
+	public void playGame() { gamePanel.playComputer(); }
 	
 	public void close() { dispose(); }
 }
