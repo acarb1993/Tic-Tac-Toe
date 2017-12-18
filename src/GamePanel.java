@@ -10,6 +10,7 @@ public class GamePanel extends JPanel {
 	private char play[][]; 
 	private ActionListener l;
 	private Random r;
+	private boolean buttonActive; // Toggles the Action Listeners of the buttons
 	
 	// Constructor
 	public GamePanel(int xAxis, int yAxis, TextPanel textPanel) {
@@ -18,9 +19,11 @@ public class GamePanel extends JPanel {
 		setPreferredSize(new Dimension(xAxis, yAxis) );
 		
 		dashButtons = new DashButton[3][3];
+		buttonActive = false;
 		play = new char[3][3];
 		this.textPanel = textPanel;
 		
+		// Puts char's in play so the win condition does not toggle (i'm aware this is terrible practice, sorry)
 		int character = 32;
 		for (int i = 0; i < play.length; i++)
 			for (int j = 0; j < play[i].length; j++) {
@@ -34,20 +37,25 @@ public class GamePanel extends JPanel {
 			    add(dashButtons[i][j]);
 			}
 		}	          
-	} // End Constructor
+	} // END Constructor
 	
 	// Getter Methods
 	public int getClicks() { return clicks; }
+	
+	// Setter Methods() 
+	public void setButtonActive(boolean b) { buttonActive = b; }
 	
 	// Class Methods
 	
 	// Sets the game to play against another person
 	public void playHuman() {
+		buttonActive = true;
 		for (int i = 0; i < dashButtons.length; i++) 
 			for (int j = 0; j < dashButtons[i].length; j++)
 		    dashButtons[i][j].addActionListener(l = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    //Execute when button is pressed
+                    //Execute when button is pressed if buttonActive is true
+                	if(buttonActive)
                     for(int i = 0; i < dashButtons.length; i++) {
                 	    for (int j = 0; j < dashButtons[i].length; j++) {
                 	        if (dashButtons[i][j].getText().equals("X") ||
@@ -57,16 +65,15 @@ public class GamePanel extends JPanel {
                 		        dashButtons[i][j].setText("X");
                 		        clicks++;
                 		        textPanel.setTurns(clicks);
-                		        play[i][j] = 'X';
+                		        play[i][j] = 'X';  
                 		        
-                		        if (checkWinCondition() ) { 
-                		            textPanel.addConditionLabel("Player 1 Wins!");
-                		            disableActionListeners();
+                		        if (checkWinCondition() ) {
+                		        	textPanel.addConditionLabel("Player 1 Wins!");
+                		        	buttonActive = false;
                 		        }
                 		        
-                		        else if(clicks == 9) { 
+                		        else if (clicks == 9) {
                 		        	textPanel.addConditionLabel("Draw!");
-                		        	disableActionListeners();
                 		        }
                 	        }
                 	        
@@ -74,88 +81,76 @@ public class GamePanel extends JPanel {
                 		        dashButtons[i][j].setText("O");
                 		        clicks++;
                 		        textPanel.setTurns(clicks);
-                		        play[i][j] = 'O';
+                		        play[i][j] = 'O';     
                 		        
-                		        if (checkWinCondition() ) { 
-                		        	textPanel.addConditionLabel("Player 2 Wins!"); 
-                		        	disableActionListeners();
-                		       }
+                		        if (checkWinCondition() ) {
+                		        	textPanel.addConditionLabel("Player 2 Wins!");
+                		        	buttonActive = false;
+                		        }
                 	        }
                         }
                     }
                 }
-            }); // End addActionListener
-	} // End playHuman
+            }); // END addActionListener
+		} // END playHuman
 	
 	// Sets the game to play against the CPU
-	public void playComputer() {
+	public void playComputerEasy() {
+		buttonActive = true;
 		for (int i = 0; i < dashButtons.length; i++) 
 			for (int j = 0; j < dashButtons[i].length; j++)
 		    dashButtons[i][j].addActionListener(l = new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    //Execute when button is pressed
+                    //Execute when button is pressed if buttonActive is true
+                	if (buttonActive)
                     for(int i = 0; i < dashButtons.length; i++) {
                 	    for (int j = 0; j < dashButtons[i].length; j++) {
                 	        if (dashButtons[i][j].getText().equals("X") ||
                 		        dashButtons[i][j].getText().equals("O") ) { } // Do Nothing
                 	
-                	        else if (dashButtons[i][j] == e.getSource() && clicks % 2 == 0 ) {
+                	        else if (dashButtons[i][j] == e.getSource() ) {
                 		        dashButtons[i][j].setText("X");
                 		        clicks++;
                 		        textPanel.setTurns(clicks);
-                		        play[i][j] = 'X';
+                		        play[i][j] = 'X'; 
                 		        
                 		        if (checkWinCondition() ) { 
-                		            textPanel.addConditionLabel("Player 1 Wins!");
-                		            disableActionListeners();
+                		        	textPanel.addConditionLabel("Player Wins");
+                		        	buttonActive = false;
                 		        }
                 		        
-                		        else if(clicks == 9) { 
-                		        	textPanel.addConditionLabel("Draw!");
-                		        	disableActionListeners();
-                		        }
+                		        else computerMovesEasy();
                 	        }
-                	        
-                	        else if (dashButtons[i][j] == e.getSource() && clicks % 2 != 0) {
-                		        dashButtons[i][j].setText("O");
-                		        clicks++;
-                		        textPanel.setTurns(clicks);
-                		        play[i][j] = 'O';
-                		        
-                		        if (checkWinCondition() ) { 
-                		        	textPanel.addConditionLabel("Player 2 Wins!"); 
-                		        	disableActionListeners();
-                		       }
-                	        }
-                        }
+                	    }
                     }
                 }
-            }); // End addActionListener
-	} // End playComputer
+            }); // END addActionListener
+		} // END playComputer
 	
 	// The logic behind the computers movement
-	public void computerMoves() {
+	private void computerMovesEasy() {
 		r = new Random();
-		int x = r.nextInt(2);
-		int y = r.nextInt(2);
-		if (play[x][y] == 'X' || play[x][y] == 'O') computerMoves();
-		else {
-			play[x][y] = 'O';
-			dashButtons[x][y].setText("O");
+		int x = r.nextInt(3);
+		int y = r.nextInt(3);
+		
+		if (clicks == 9) { 
+			textPanel.addConditionLabel("Draw!"); 
 		}
-	}
-	
-	// Turns off the Action Listeners once the game is over
-	public void disableActionListeners() {
-		for (int i = 0; i < dashButtons.length; i++) {
-			for (int j = 0; j < dashButtons[i].length; j++) {
-				dashButtons[i][j].removeActionListener(l);
+		else if (play[x][y] == 'X' || play[x][y] == 'O') { computerMovesEasy(); }
+		else {
+			clicks++;
+		    play[x][y] = 'O';
+		    dashButtons[x][y].setText("O");	
+		    
+		    if (checkWinCondition() ) {
+				textPanel.addConditionLabel("Computer Wins!");
+				buttonActive = false;
 			}
 		}
-	}
+	}// END computerMoves
 	
 	// Checks to see if there is a win in any direction
-	public boolean checkWinCondition() {
+	private boolean checkWinCondition() {
 		// Tests to see if there is a win across
 		for (int i = 0; i < play.length; i++) 
 			for (int j = 0; j < 1; j++) 
@@ -185,7 +180,7 @@ public class GamePanel extends JPanel {
 					return true;
 		
 		return false;
-	}// End checkWinCondition
+	}// END checkWinCondition
 	
 	// Resets the game to start a new one
 	public void reset() {
@@ -200,5 +195,5 @@ public class GamePanel extends JPanel {
 		}
 		textPanel.resetTextPanel();
 		
-	} // End reset
-}// End class 
+	} // END reset
+}// END GamePanel

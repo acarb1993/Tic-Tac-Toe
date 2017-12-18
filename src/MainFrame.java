@@ -22,9 +22,7 @@ public class MainFrame extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null); 
 		setVisible(true);
-	}
-	
-	public void playGame() { gamePanel.playComputer(); }
+	}// END Constructor
 	
 	public void close() { dispose(); }
 }
